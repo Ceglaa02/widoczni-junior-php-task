@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./app:/var/www/app
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - php
+    networks:
+      - network
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: php-fpm
+    restart: unless-stopped
+    volumes:
+      - ./app:/var/www/app
+    networks:
+      - network
+
+  database:
+    image: mysql:8
+    container_name: mysql
+    restart: unless-stopped
+    env_file:
+      - ./app/.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
+  mysql_data:
