@@ -40,15 +40,28 @@ class InitTestDbCommand extends Command
         try {
             $faker = Factory::create();
 
+            $packages = [];
+            for ($i = 0; $i < 10; $i++) {
+                $packages[] = [
+                    'name' => $faker->word,
+                    'price' => $faker->randomFloat(2, 50, 200)
+                ];
+            }
+
+            $this->connection->executeQuery($this->generateInsertQuery('packages', ['name', 'price'], $packages));
+
+            $packagesIds = $this->connection->fetchFirstColumn('SELECT id FROM packages');
+
             $clients = [];
             for ($i = 0; $i < 10; $i++) {
                 $clients[] = [
                     'name' => $faker->company,
-                    'nip' => $faker->numerify('PL##########')
+                    'nip' => $faker->numerify('PL##########'),
+                    'package_id' => $faker->randomElement($packagesIds)
                 ];
             }
 
-            $this->connection->executeQuery($this->generateInsertQuery('clients', ['name', 'nip'], $clients));
+            $this->connection->executeQuery($this->generateInsertQuery('clients', ['name', 'nip', 'package_id'], $clients));
 
             $clientIds = $this->connection->fetchFirstColumn('SELECT id FROM clients');
 
@@ -63,15 +76,6 @@ class InitTestDbCommand extends Command
 
             $this->connection->executeQuery($this->generateInsertQuery('employees', ['name', 'email', 'client_id'], $employees));
 
-            $packages = [];
-            for ($i = 0; $i < 10; $i++) {
-                $packages[] = [
-                    'client_id' => $faker->randomElement($clientIds),
-                    'name' => $faker->word,
-                    'price' => $faker->randomFloat(2, 50, 200)
-                ];
-            }
-
             $contacts = [];
             for ($i = 0; $i < 10; $i++) {
                 $contacts[] = [
@@ -82,7 +86,6 @@ class InitTestDbCommand extends Command
                 ];
             }
 
-            $this->connection->executeQuery($this->generateInsertQuery('packages', ['client_id', 'name', 'price'], $packages));
             $this->connection->executeQuery($this->generateInsertQuery('contacts', ['client_id', 'name', 'email', 'phone'], $contacts));
 
 

@@ -19,11 +19,29 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#clients">Klienci</button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#employees">Pracownicy</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#contacts">Kontakty</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#packages">Pakiety</button>
+        </li>
     </ul>
 
     <div class="tab-content mt-4">
         <div class="tab-pane fade show active" id="clients" role="tabpanel">
             {% include './common/_clients.html.twig' %}
+        </div>
+        <div class="tab-pane fade" id="employees" role="tabpanel">
+            {% include './common/_employees.html.twig' %}
+        </div>
+        <div class="tab-pane fade" id="contacts" role="tabpanel">
+            {% include './common/_contacts.html.twig' %}
+        </div>
+        <div class="tab-pane fade" id="packages" role="tabpanel">
+            {% include './common/_packages.html.twig' %}
         </div>
     </div>
 {% endblock %}

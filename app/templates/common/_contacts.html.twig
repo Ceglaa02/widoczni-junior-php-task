@@ -1,0 +1,47 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Dane kontaktu</th>
+            <th>Firma</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contact in contacts %}
+            <tr>
+                <td>
+                    <div class="small">
+                        <div>
+                            <span class="fw-bold">Imię i nazwisko: </span>
+                            <span>{{ contact.name }}</span>
+                        </div>
+                        <div>
+                            <span class="fw-bold">Email: </span>
+                            <span>{{ contact.email }}</span>
+                        </div>
+                        <div>
+                            <span class="fw-bold">Telefon: </span>
+                            <span>{{ contact.phone }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    {% for client in clients %}
+                        {% if contact.client_id == client.id %}
+                            <div class="my-2">
+                                <div>
+                                    <span>{{ client.name }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">Brak danych</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

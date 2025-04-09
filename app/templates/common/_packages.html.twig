@@ -1,0 +1,34 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Nazwa pakietu</th>
+            <th>Cena (PLN)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for package in packages %}
+            <tr>
+                <td>
+                    <div class="small">
+                        <div>
+                            <span>{{ package.name }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="small">
+                        <div>
+                            <span>{{ package.price }}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">Brak danych</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

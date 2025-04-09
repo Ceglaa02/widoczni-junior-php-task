@@ -27,20 +27,20 @@ class CreateDbCommand extends Command
     {
         $schemaSql = [
             <<<SQL
-            CREATE TABLE IF NOT EXISTS clients (
+            CREATE TABLE IF NOT EXISTS packages (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
-                nip VARCHAR(20) NOT NULL
+                price DECIMAL(10,2) NOT NULL
             );
             SQL,
 
             <<<SQL
-            CREATE TABLE IF NOT EXISTS packages (
+            CREATE TABLE IF NOT EXISTS clients (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                client_id INT NOT NULL,
                 name VARCHAR(255) NOT NULL,
-                price DECIMAL(10,2) NOT NULL,
-                FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
+                nip VARCHAR(20) NOT NULL,
+                package_id INT NOT NULL,
+                FOREIGN KEY (package_id) REFERENCES packages(id)
             );
             SQL,
 
