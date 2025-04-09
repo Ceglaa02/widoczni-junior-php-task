@@ -44,35 +44,31 @@ class InitTestDbCommand extends Command
             for ($i = 0; $i < 10; $i++) {
                 $clients[] = [
                     'name' => $faker->company,
-                    'nip' => $faker->numerify('PL##########'),
-                    'email' => $faker->email,
-                    'phone' => $faker->phoneNumber,
+                    'nip' => $faker->numerify('PL##########')
                 ];
             }
 
-            $this->connection->executeQuery($this->generateInsertQuery('clients', ['name', 'nip', 'email', 'phone'], $clients));
+            $this->connection->executeQuery($this->generateInsertQuery('clients', ['name', 'nip'], $clients));
 
             $clientIds = $this->connection->fetchFirstColumn('SELECT id FROM clients');
 
             $employees = [];
-            for ($i = 0; $i < 5; $i++) {
+            for ($i = 0; $i < 10; $i++) {
                 $employees[] = [
                     'name' => $faker->name,
                     'email' => $faker->email,
+                    'client_id' => $faker->randomElement($clientIds),
                 ];
             }
 
-            $this->connection->executeQuery($this->generateInsertQuery('employees', ['name', 'email'], $employees));
-
-            $employeeIds = $this->connection->fetchFirstColumn('SELECT id FROM employees');
+            $this->connection->executeQuery($this->generateInsertQuery('employees', ['name', 'email', 'client_id'], $employees));
 
             $packages = [];
             for ($i = 0; $i < 10; $i++) {
                 $packages[] = [
                     'client_id' => $faker->randomElement($clientIds),
                     'name' => $faker->word,
-                    'price' => $faker->randomFloat(2, 50, 200),
-                    'valid_until' => $faker->date(),
+                    'price' => $faker->randomFloat(2, 50, 200)
                 ];
             }
 
@@ -86,17 +82,8 @@ class InitTestDbCommand extends Command
                 ];
             }
 
-            $clientEmployees = [];
-            for ($i = 0; $i < 10; $i++) {
-                $clientEmployees[] = [
-                    'client_id' => $faker->randomElement($clientIds),
-                    'employee_id' => $faker->randomElement($employeeIds),
-                ];
-            }
-
-            $this->connection->executeQuery($this->generateInsertQuery('packages', ['client_id', 'name', 'price', 'valid_until'], $packages));
+            $this->connection->executeQuery($this->generateInsertQuery('packages', ['client_id', 'name', 'price'], $packages));
             $this->connection->executeQuery($this->generateInsertQuery('contacts', ['client_id', 'name', 'email', 'phone'], $contacts));
-            $this->connection->executeQuery($this->generateInsertQuery('client_employee', ['client_id', 'employee_id'], $clientEmployees));
 
 
             $output->writeln('<info>Dane zostały poprawnie wstawione.</info>');

@@ -1,0 +1,73 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Dane klienta</th>
+            <th>Pakiety</th>
+            <th>Dane kontaktowe</th>
+            <th>Opiekunowie</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for client in clients %}
+            <tr>
+                <td>
+                    <div class="small">
+                        <div>
+                            <span class="fw-bold">Nazwa: </span>
+                            <span>{{ client.name }}</span>
+                        </div>
+                        <div>
+                            <span class="fw-bold">Nip: </span>
+                            <span>{{ client.nip }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    {% for package in packages %}
+                        {% if package.client_id == client.id %}
+                            <span class="badge text-bg-primary">{{ package.name }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for contact in contacts %}
+                        {% if contact.client_id == client.id %}
+                            <div class="my-2">
+                                <div>
+                                    <span class="fw-bold">Imię: </span>
+                                    <span>{{ contact.name }}</span>
+                                </div>
+                                <div>
+                                    <span class="fw-bold">E-mail: </span>
+                                    <span>{{ contact.email }}</span>
+                                </div>
+                                <div>
+                                    <span class="fw-bold">Telefon: </span>
+                                    <span>{{ contact.phone }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for employee in employees %}
+                        {% if employee.client_id == client.id %}
+                            <div class="my-2">
+                                <div>
+                                    <span class="fw-bold">Imię i nazwisko: </span>
+                                    <span>{{ employee.name }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Brak danych</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

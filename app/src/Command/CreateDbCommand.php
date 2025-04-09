@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,10 +30,7 @@ class CreateDbCommand extends Command
             CREATE TABLE IF NOT EXISTS clients (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
-                nip VARCHAR(20) NOT NULL,
-                email VARCHAR(255),
-                phone VARCHAR(50),
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                nip VARCHAR(20) NOT NULL
             );
             SQL,
 
@@ -42,7 +40,6 @@ class CreateDbCommand extends Command
                 client_id INT NOT NULL,
                 name VARCHAR(255) NOT NULL,
                 price DECIMAL(10,2) NOT NULL,
-                valid_until DATE,
                 FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
             );
             SQL,
@@ -61,20 +58,12 @@ class CreateDbCommand extends Command
             <<<SQL
             CREATE TABLE IF NOT EXISTS employees (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                email VARCHAR(255)
-            );
-            SQL,
-
-            <<<SQL
-            CREATE TABLE IF NOT EXISTS client_employee (
                 client_id INT NOT NULL,
-                employee_id INT NOT NULL,
-                PRIMARY KEY (client_id, employee_id),
-                FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE,
-                FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255),
+                FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
             );
-            SQL,
+            SQL
         ];
 
         foreach ($schemaSql as $sql) {
