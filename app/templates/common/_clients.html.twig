@@ -52,7 +52,7 @@
                 </td>
                 <td>
                     {% for employee in employees %}
-                        {% if employee.client_id == client.id %}
+                        {% if employee.id == client.employee_id %}
                             <div class="my-2">
                                 <div>
                                     <span class="fw-bold">Imię i nazwisko: </span>

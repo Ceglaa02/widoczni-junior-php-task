@@ -35,12 +35,22 @@ class CreateDbCommand extends Command
             SQL,
 
             <<<SQL
+            CREATE TABLE IF NOT EXISTS employees (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255)
+            );
+            SQL,
+
+            <<<SQL
             CREATE TABLE IF NOT EXISTS clients (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 nip VARCHAR(20) NOT NULL,
-                package_id INT NOT NULL,
-                FOREIGN KEY (package_id) REFERENCES packages(id)
+                package_id INT,
+                employee_id INT,
+                FOREIGN KEY (package_id) REFERENCES packages(id),
+                FOREIGN KEY (employee_id) REFERENCES employees(id)
             );
             SQL,
 
@@ -54,16 +64,6 @@ class CreateDbCommand extends Command
                 FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
             );
             SQL,
-
-            <<<SQL
-            CREATE TABLE IF NOT EXISTS employees (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                client_id INT NOT NULL,
-                name VARCHAR(255) NOT NULL,
-                email VARCHAR(255),
-                FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
-            );
-            SQL
         ];
 
         foreach ($schemaSql as $sql) {

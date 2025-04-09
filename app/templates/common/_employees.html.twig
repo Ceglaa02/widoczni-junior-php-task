@@ -23,7 +23,7 @@
                 </td>
                 <td>
                     {% for client in clients %}
-                        {% if employee.client_id == client.id %}
+                        {% if employee.id == client.employee_id %}
                             <div class="my-2">
                                 <div>
                                     <span>{{ client.name }}</span>

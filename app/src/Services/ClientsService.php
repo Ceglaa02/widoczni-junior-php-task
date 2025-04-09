@@ -27,4 +27,18 @@ class ClientsService
             return [];
         }
     }
+
+    public function add(array $contact, array $client): bool
+    {
+        try {
+            $this->connection->insert('clients', $client);
+            $clientId = $this->connection->lastInsertId();
+
+            $this->connection->insert('contacts', array_merge($contact, ['client_id' => $clientId]));
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }

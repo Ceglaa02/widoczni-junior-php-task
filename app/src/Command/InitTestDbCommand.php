@@ -50,6 +50,18 @@ class InitTestDbCommand extends Command
 
             $this->connection->executeQuery($this->generateInsertQuery('packages', ['name', 'price'], $packages));
 
+            $employees = [];
+            for ($i = 0; $i < 10; $i++) {
+                $employees[] = [
+                    'name' => $faker->name,
+                    'email' => $faker->email
+                ];
+            }
+
+            $this->connection->executeQuery($this->generateInsertQuery('employees', ['name', 'email'], $employees));
+
+            $employeesIds = $this->connection->fetchFirstColumn('SELECT id FROM employees');;
+
             $packagesIds = $this->connection->fetchFirstColumn('SELECT id FROM packages');
 
             $clients = [];
@@ -57,24 +69,14 @@ class InitTestDbCommand extends Command
                 $clients[] = [
                     'name' => $faker->company,
                     'nip' => $faker->numerify('PL##########'),
-                    'package_id' => $faker->randomElement($packagesIds)
+                    'package_id' => $faker->randomElement($packagesIds),
+                    'employee_id' => $faker->randomElement($employeesIds),
                 ];
             }
 
-            $this->connection->executeQuery($this->generateInsertQuery('clients', ['name', 'nip', 'package_id'], $clients));
+            $this->connection->executeQuery($this->generateInsertQuery('clients', ['name', 'nip', 'package_id','employee_id'], $clients));
 
             $clientIds = $this->connection->fetchFirstColumn('SELECT id FROM clients');
-
-            $employees = [];
-            for ($i = 0; $i < 10; $i++) {
-                $employees[] = [
-                    'name' => $faker->name,
-                    'email' => $faker->email,
-                    'client_id' => $faker->randomElement($clientIds),
-                ];
-            }
-
-            $this->connection->executeQuery($this->generateInsertQuery('employees', ['name', 'email', 'client_id'], $employees));
 
             $contacts = [];
             for ($i = 0; $i < 10; $i++) {
